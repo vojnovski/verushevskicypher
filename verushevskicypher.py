@@ -1,39 +1,34 @@
 from sys import argv
-encode_map = {
-    "a": 7,
-    "b": 4,
-    "v": 20,
-    "g": 50,
-    "d": 9,
-    "e": 24,
-    "z": 51,
-    "i": 22,
-    "j": 17,
-    "k": 33,
-    "l": 12,
-    "m": 21,
-    "n": 27,
-    "o": 5,
-    "p": 3,
-    "r": 8,
-    "s": 18,
-    "t": 44,
-    "u": 39,
-    "c": 13,
-    " ": 0,
-    }
-decode_map = {v: k for k, v in encode_map.items()}
+import json, argparse
 
 
-def encode(s):
-    return "_".join([str(encode_map[char]) for char in s])
+def get_encode_map(file_name):
+    file = open(file_name, 'r')
+    file_content = json.load(file)
+    file.close()
+    if type(file_content) == dict:
+        return file_content
+    else:
+        raise IOError()
+    
+def encode(message, encode_map):
+    return "_".join([str(encode_map[char]) for char in message])
 
-
-def decode(s):
-    return "".join([decode_map[int(code)] for code in s.split("_")])
+def decode(message, encode_map):
+    decode_map = {v: k for k, v in encode_map.items()}
+    return "".join([decode_map[int(code)] for code in message.split("_")])
 
 if __name__ == "__main__":
-    if argv[1] == "encode":
-        print encode(" ".join(argv[2:]))
-    elif argv[1] == "decode":
-        print decode(argv[2])
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mode", choices=['encode', 'decode'])
+    parser.add_argument("message", nargs='*')
+    parser.add_argument("--mapfile", default="encode_map.json")
+    
+    arguments = parser.parse_args()
+    
+    map_file = arguments.mapfile
+    encode_map = get_encode_map(map_file)
+    if arguments.mode == 'encode':
+        print(encode(" ".join(arguments.message), encode_map))
+    else:
+        print(decode(" ".join(arguments.message), encode_map))
