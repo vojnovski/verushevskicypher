@@ -1,4 +1,4 @@
-import json, argparse
+import json, argparse, os
 
 def get_encode_map(file_name):
     file = open(file_name, 'r')
@@ -25,8 +25,8 @@ DEFAULT_MAPFILE = get_default_mapfile()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('mode", choices=['encode', 'decode'])
-    parser.add_argument('message", nargs='*')
+    parser.add_argument('mode', choices=['encode', 'decode'])
+    parser.add_argument('message', nargs='*')
     parser.add_argument('--mapfile', default=DEFAULT_MAPFILE)
     
     arguments = parser.parse_args()
