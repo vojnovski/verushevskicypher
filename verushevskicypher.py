@@ -36,4 +36,4 @@ if __name__ == "__main__":
     if arguments.mode == 'encode':
         print(encode(' '.join(arguments.message), encode_map))
     else:
-        print(decode(''.join(arguments.message), encode_map))
+        print(decode('_0_'.join(arguments.message), encode_map))
